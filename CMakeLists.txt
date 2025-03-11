@@ -3,7 +3,7 @@ project(project4)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(calibration-AR vidDisplay.cpp)
+add_executable(calibration-AR vidDisplay.cpp imgProc.cpp)
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
