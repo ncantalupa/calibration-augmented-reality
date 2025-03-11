@@ -11,7 +11,7 @@ Display a video feed
 #include <opencv2/opencv.hpp>
 
 constexpr bool IPHONE_HANDOFF = true; // If true, video feed from phone will be used if available
-constexpr int FRAME_RATE = 24;
+constexpr int FRAME_RATE = 60;
 
 int main(int argc, char* argv[])
 {
@@ -25,10 +25,18 @@ int main(int argc, char* argv[])
     }
 
     cv::Mat frame;
+    cv::Mat gray;
+    std::vector<cv::Point2f> corners;
+    cv::Size patternsize(9,6);
+    std::vector<cv::Vec3f> point_set;
+	std::vector<std::vector<cv::Vec3f> > point_list;
+	std::vector<std::vector<cv::Point2f> > corner_list;
 
     for (;;)
     {
         *capDev >> frame; // get a new frame from the camera, treat as a stream
+        // make gray the grayscale version of frame
+        cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 
         if (frame.empty())
         {
@@ -42,6 +50,16 @@ int main(int argc, char* argv[])
                 printf("Frame is empty\n");
                 break;
             }
+        }
+
+        bool patternfound = findChessboardCorners(gray, patternsize, corners,
+            cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE
+            + cv::CALIB_CB_FAST_CHECK);
+        if(patternfound) {
+            cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1),
+            cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 30, 0.1));
+          drawChessboardCorners(frame, patternsize, cv::Mat(corners), patternfound);
+          std::cout << "Corners Found: " << corners.size()<< " First Corner: " <<  corners[0] << std::endl;
         }
 
         cv::imshow("AR Video", frame);
