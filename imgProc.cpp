@@ -1,7 +1,9 @@
 #include <opencv2/core/mat.hpp>
+#include <iostream>
 #include "imgProc.h"
 
 int create_point_set(int x, int z, std::vector<cv::Vec3f>& point_set) {
+    point_set.clear(); 
     for (int i = 0; i < z; i++)
     {
         for (int j = 0; j < x; j++)
