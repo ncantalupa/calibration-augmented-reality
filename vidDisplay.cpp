@@ -60,8 +60,8 @@ int main(int argc, char* argv[])
 
         // Find the chessboard corners
         bool patternfound = findChessboardCorners(gray, patternsize, corner_set,
-            cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE
-            + cv::CALIB_CB_FAST_CHECK);
+            cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE
+            | cv::CALIB_CB_FAST_CHECK);
         
         // If corners are found, refine the corner locations, then store the locations for calibration
         if(patternfound) {
@@ -96,28 +96,48 @@ int main(int argc, char* argv[])
         }
         if (key == 'c') // Calibrate the camera
         {
-            if (key == 'c') // Calibrate the camera
-        {
             if (corner_list.size() < 5)
             {
                 std::cout << "Not enough images to calibrate (Need 5): " << corner_list.size() << std::endl;
                 continue;
-            } else {
+            }
+            else
+            {
                 std::cout << "Calibrating camera" << std::endl;
-                cv::Mat cameraMatrix = cv::Mat::eye(3, 3, CV_64F); // Initialize camera matrix as identity matrix
-                cameraMatrix.at<double>(0, 0) = 1.0; // fx
-                cameraMatrix.at<double>(1, 1) = 1.0; // fy
-                cameraMatrix.at<double>(0, 2) = frame.cols / 2.0; // cx
-                cameraMatrix.at<double>(1, 2) = frame.rows / 2.0; // cy
-                cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64F); // Initialize distortion coefficients
+
+                // Initialize camera matrix with reasonable values
+                cv::Mat cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
+                cameraMatrix.at<double>(0, 0) = 1.0; // fx (focal length in x-direction)
+                cameraMatrix.at<double>(1, 1) = 1.0; // fy (focal length in y-direction)
+                cameraMatrix.at<double>(2, 2) = 1.0; // 1.0 (focal length in z-direction)
+                cameraMatrix.at<double>(0, 2) = frame.cols / 2.0; // cx (principal point x-coordinate)
+                cameraMatrix.at<double>(1, 2) = frame.rows / 2.0; // cy (principal point y-coordinate)
+
+                // Initialize distortion coefficients to zero
+                cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64F);
+
+                // Vectors to store rotation and translation vectors
                 std::vector<cv::Mat> rvecs, tvecs;
-                cv::calibrateCamera(point_list, corner_list, frame.size(), cameraMatrix, distCoeffs, rvecs, tvecs);
-                std::cout << "Camera Matrix: " << cameraMatrix << std::endl;
-                std::cout << "Distortion Coefficients: " << distCoeffs << std::endl;
+
+                std::cout << "Camera Matrix Before Calibration: " << cameraMatrix << std::endl;
+                std::cout << "Distortion Coefficients Before Calibration: " << distCoeffs << std::endl;
+
+                // Perform camera calibration
+                try
+                {
+                    cv::calibrateCamera(point_list, corner_list, frame.size(), cameraMatrix, distCoeffs, rvecs, tvecs);
+                    std::cout << "Camera Matrix: " << cameraMatrix << std::endl;
+                    std::cout << "Distortion Coefficients: " << distCoeffs << std::endl;
+                }
+                catch (const cv::Exception& e)
+                {
+                    std::cerr << "Calibration failed: " << e.what() << std::endl;
+                }
+                // Write the camera matrix and distortion coefficients to a file
+                const char* filename = "../camera_calibration.txt";
+                writeCameraCalibration(filename, cameraMatrix, distCoeffs);
             }
         }
-        }
-
     }
 
     delete capDev;
