@@ -12,4 +12,5 @@ Image processing functions
 
 int create_point_set(int x, int z, std::vector<cv::Vec3f>& point_set);
 int writeCameraCalibration (const char* filename, cv::Mat& cameraMatrix, cv::Mat& distCoeffs);
+int writeRTvectors(const char* filename, std::vector<cv::Mat>& rvecs, std::vector<cv::Mat>& tvecs);
 #endif //IMGPROC_H

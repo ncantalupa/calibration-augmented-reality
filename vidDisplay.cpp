@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
         // see if there is a waiting keystroke
         constexpr int waitTime = 1000 / FRAME_RATE;
-        const char key = static_cast<char>(cv::waitKey(waitTime)); // TODO revert parameter to waitTime
+        const char key = static_cast<char>(cv::waitKey(waitTime));
 
         if (key == 'q')
         {
@@ -136,6 +136,8 @@ int main(int argc, char* argv[])
                 // Write the camera matrix and distortion coefficients to a file
                 const char* filename = "../camera_calibration.txt";
                 writeCameraCalibration(filename, cameraMatrix, distCoeffs);
+                filename = "../screenshots/rotation_translation_vectors.txt";
+                writeRTvectors(filename, rvecs, tvecs);
             }
         }
     }

@@ -35,3 +35,4 @@
 /build/*
 /screeenshots/*
 /.vscode/*
+camera_calibration.txt
