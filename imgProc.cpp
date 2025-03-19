@@ -213,7 +213,7 @@ int draw_sphere(cv::Mat& frame, const cv::Vec3d& rotation_vec, const cv::Vec3d& 
     
     for (int i = 1; i < image_points.size(); i++)
     {
-        cv::line(frame, image_points[0], image_points[i], cv::Scalar(0, 0, 255), 1);
+        cv::line(frame, image_points[i-1], image_points[i], cv::Scalar(i*(float(255/200)), 255-i*(float(255/200)), 0), 2);
     }
     return 0;
 

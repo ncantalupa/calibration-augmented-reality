@@ -22,5 +22,7 @@ df['z'] += 4.0
 df['z'] *= -1.0
 df['x'] += + 3.0
 df['y'] += 4.0
+df = df.sort_values(by=['z', 'y', 'x'])
+df = df.reset_index(drop=True)
 print(df)
 df.to_csv('sphere_points.csv', index=True, header=False)
