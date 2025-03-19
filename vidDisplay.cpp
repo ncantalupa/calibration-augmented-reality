@@ -41,9 +41,9 @@ int main(int argc, char* argv[])
     cv::Mat distCoeffs; // Distortion coefficients
 
     /*
-    if (std::ifstream file("../camera_calibration.txt"); file.good())
+    if (std::ifstream file("../camera_calibration.json"); file.good())
     {
-        readCameraCalibration("../camera_calibration.txt", cameraMatrix, distCoeffs);
+        readCameraCalibration("../camera_calibration.json", cameraMatrix, distCoeffs);
         std::cout << "Camera Matrix: " << cameraMatrix << std::endl;
         std::cout << "Distortion Coefficients: " << distCoeffs << std::endl;
     }
