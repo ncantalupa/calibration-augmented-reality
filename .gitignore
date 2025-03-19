@@ -36,3 +36,5 @@
 /screeenshots/*
 /.vscode/*
 camera_calibration.txt
+/screenshots/
+/cmake-build-debug/
