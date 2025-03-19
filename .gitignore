@@ -38,3 +38,5 @@
 camera_calibration.txt
 /screenshots/
 /cmake-build-debug/
+
+camera_calibration.json
