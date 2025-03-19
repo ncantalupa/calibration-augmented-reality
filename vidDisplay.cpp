@@ -40,14 +40,14 @@ int main(int argc, char* argv[])
     cv::Mat cameraMatrix; // Camera matrix
     cv::Mat distCoeffs; // Distortion coefficients
 
-    /*
-    if (std::ifstream file("../camera_calibration.json"); file.good())
+    
+    if (std::ifstream file("../camera_calibration.txt"); file.good())
     {
-        readCameraCalibration("../camera_calibration.json", cameraMatrix, distCoeffs);
+        readCameraCalibration("../camera_calibration.txt", cameraMatrix, distCoeffs);
         std::cout << "Camera Matrix: " << cameraMatrix << std::endl;
         std::cout << "Distortion Coefficients: " << distCoeffs << std::endl;
     }
-    */
+    
 
     for (;;)
     {
@@ -144,6 +144,8 @@ int main(int argc, char* argv[])
                 cv::line(frame, image_points[0], image_points[1], cv::Scalar(0, 0, 255), 3);
                 cv::line(frame, image_points[0], image_points[2], cv::Scalar(0, 255, 0), 3);
                 cv::line(frame, image_points[0], image_points[3], cv::Scalar(255, 0, 0), 3);
+
+                draw_object(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
             }
         }
 
@@ -210,6 +212,8 @@ int main(int argc, char* argv[])
                 // Write the camera matrix and distortion coefficients to a file
                 const char* filename = "../camera_calibration.txt";
                 writeCameraCalibration(filename, cameraMatrix, distCoeffs);
+                filename = "../camera_calibration.json";
+                writeCameraCalibrationJSON(filename, cameraMatrix, distCoeffs);
                 filename = "../screenshots/rotation_translation_vectors.txt";
                 writeRTvectors(filename, rvecs, tvecs);
             }

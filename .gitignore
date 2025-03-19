@@ -36,3 +36,4 @@
 /screeenshots/*
 /.vscode/*
 camera_calibration.txt
+camera_calibration.json
