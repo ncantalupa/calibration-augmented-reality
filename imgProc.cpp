@@ -18,7 +18,7 @@ int writeCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat&
         std::cerr << "Error opening file: " << filename << std::endl;
         return -1;
     }
-    
+
     file << "Camera Matrix: [";
     for (int i = 0; i < cameraMatrix.rows; i++) {
         for (int j = 0; j < cameraMatrix.cols; j++) {
@@ -30,7 +30,7 @@ int writeCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat&
             file << "; ";
     }
     file << "]" << std::endl;
-    
+
     file << "Distortion Coefficients: [";
     for (int i = 0; i < distCoeffs.rows; i++) {
         for (int j = 0; j < distCoeffs.cols; j++) {
@@ -42,7 +42,7 @@ int writeCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat&
             file << "; ";
     }
     file << "]";
-    
+
     file.close();
     return 0;
 }
@@ -101,4 +101,3 @@ int writeRTvectors(const char* filename, std::vector<cv::Mat>& rvecs, std::vecto
     file.close();
     return 0;
 }
-
