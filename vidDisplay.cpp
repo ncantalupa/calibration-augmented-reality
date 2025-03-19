@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
                 cv::line(frame, image_points[0], image_points[2], cv::Scalar(0, 255, 0), 3);
                 cv::line(frame, image_points[0], image_points[3], cv::Scalar(255, 0, 0), 3);
 
-                draw_object(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
+                draw_sphere(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
             }
         }
 

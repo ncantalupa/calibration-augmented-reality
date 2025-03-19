@@ -4,7 +4,7 @@ import pandas as pd
 def generate_points_on_sphere(n, radius=1):
     golden_ratio = (1 + math.sqrt(5)) / 2
     angle_increment = 2 * math.pi * golden_ratio
-    points = []
+    points = [(0,0,0)]
 
     for i in range(n):
         distance = i / n
@@ -16,8 +16,11 @@ def generate_points_on_sphere(n, radius=1):
         points.append((x, y, z))
     return points
 
-points = generate_points_on_sphere(40, 4)
+points = generate_points_on_sphere(200, 2)
 df = pd.DataFrame(points, columns=['x', 'y', 'z'])
-df['z'] = df['z'] + 4.0
+df['z'] += 4.0
+df['z'] *= -1.0
+df['x'] += + 3.0
+df['y'] += 4.0
 print(df)
 df.to_csv('sphere_points.csv', index=True, header=False)

@@ -198,15 +198,23 @@ int readInPoints(char *filename, std::vector<std::vector<float>> &data)
     return 0;
 }
 
-int draw_object(cv::Mat& frame, const cv::Vec3d& rotation_vec, const cv::Vec3d& translation_vec, const cv::Mat& cameraMatrix, const cv::Mat& distCoeffs, const std::vector<cv::Point2f>& image_points)
+int draw_sphere(cv::Mat& frame, const cv::Vec3d& rotation_vec, const cv::Vec3d& translation_vec, const cv::Mat& cameraMatrix, const cv::Mat& distCoeffs, std::vector<cv::Point2f>& image_points)
 {
-    // std::vector<cv::Point3f> object_points = {
-    //     cv::Point3f(2, 2, 2), 
-    //     cv::Point3f(2, 2, 4)
-    // };
-    // cv::projectPoints(object_points, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
+    std::vector<std::vector<float>> points;
+    readInPoints("../sphere_points.csv", points);
 
-    // cv::line(frame, image_points[0], image_points[1], cv::Scalar(0, 0, 255), 3);
+    std::vector<cv::Point3f> object_points;
+
+    for (int i = 0; i < points.size(); i++)
+    {
+        object_points.push_back(cv::Point3f(points[i][0], points[i][1], points[i][2]));
+    }
+    cv::projectPoints(object_points, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
+    
+    for (int i = 1; i < image_points.size(); i++)
+    {
+        cv::line(frame, image_points[0], image_points[i], cv::Scalar(0, 0, 255), 1);
+    }
     return 0;
 
 }
