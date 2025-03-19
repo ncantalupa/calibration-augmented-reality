@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
     std::vector<std::vector<cv::Point2f>> corner_list; // List of the corners found in each image
     cv::Mat cameraMatrix; // Camera matrix
     cv::Mat distCoeffs; // Distortion coefficients
+    int object_3d = 1; // 1 for sphere, 2 for airplane
 
     
     if (std::ifstream file("../camera_calibration.txt"); file.good())
@@ -107,17 +108,17 @@ int main(int argc, char* argv[])
                 cv::solvePnP(point_set, corner_set, cameraMatrix, distCoeffs, rotation_vec, translation_vec);
 
                 // Display rotation and translation vectors on the bottom of the frame
-                std::string rotationText = "Rotation Vector: ";
+                std::string rotationText = "Rotation: ";
                 for (int i = 0; i < 3; i++)
                 {
                     rotationText += std::to_string(std::round(rotation_vec[i] * 10) / 10) + " ";
                 }
-                std::string translationText = "Translation Vector: ";
+                std::string translationText = "Translation: ";
                 for (int i = 0; i < 3; i++)
                 {
                     translationText += std::to_string(std::round(translation_vec[i] * 10) / 10) + " ";
                 }
-                cv::putText(frame, rotationText, cv::Point(10, frame.rows - 40), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
+                cv::putText(frame, rotationText, cv::Point(10, frame.rows - 60), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
                 cv::putText(frame, translationText, cv::Point(10, frame.rows - 20), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255), 2);
 
                 // Project corner points onto the image
@@ -125,7 +126,7 @@ int main(int argc, char* argv[])
                 cv::projectPoints(point_set, rotation_vec, translation_vec, cameraMatrix, distCoeffs, cornerPoints);
                 for (auto imagePoint : cornerPoints)
                 {
-                    cv::circle(frame, imagePoint, 5, cv::Scalar(0, 0, 255), -1);
+                    cv::circle(frame, imagePoint, 5, cv::Scalar(0, 0, 255), -2);
                 }
 
                 // Define 3D axes in world coordinates
@@ -145,7 +146,14 @@ int main(int argc, char* argv[])
                 cv::line(frame, image_points[0], image_points[2], cv::Scalar(0, 255, 0), 3);
                 cv::line(frame, image_points[0], image_points[3], cv::Scalar(255, 0, 0), 3);
 
-                draw_sphere(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
+                if (object_3d == 1)
+                {
+                    draw_sphere(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
+                }
+                if (object_3d == 2)
+                {
+                    draw_airplane(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
+                }
             }
         }
 
@@ -154,6 +162,16 @@ int main(int argc, char* argv[])
         // see if there is a waiting keystroke
         constexpr int waitTime = 1000 / FRAME_RATE;
         const char key = static_cast<char>(cv::waitKey(waitTime));
+
+        if (key == '1')
+        {
+            object_3d = 1;
+        }
+
+        if (key == '2')
+        {
+            object_3d = 2;
+        }
 
         if (key == 'q')
         {
@@ -212,10 +230,10 @@ int main(int argc, char* argv[])
                 // Write the camera matrix and distortion coefficients to a file
                 const char* filename = "../camera_calibration.txt";
                 writeCameraCalibration(filename, cameraMatrix, distCoeffs);
-                filename = "../camera_calibration.json";
-                writeCameraCalibrationJSON(filename, cameraMatrix, distCoeffs);
-                filename = "../screenshots/rotation_translation_vectors.txt";
-                writeRTvectors(filename, rvecs, tvecs);
+                //filename = "../camera_calibration.json";
+                //writeCameraCalibrationJSON(filename, cameraMatrix, distCoeffs);
+                //filename = "../screenshots/rotation_translation_vectors.txt";
+                //writeRTvectors(filename, rvecs, tvecs);
             }
         }
     }
