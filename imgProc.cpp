@@ -6,6 +6,11 @@
 #include <opencv2/calib3d.hpp>
 #include <opencv2/imgproc.hpp>
 
+// Function to create a set of 3D points in the World Coordinate System
+// int x: number of points in the x direction
+// int z: number of points in the z direction
+// std::vector<cv::Vec3f>& point_set: reference to the vector of 3D points
+// Returns 0 if successful
 int create_point_set(int x, int z, std::vector<cv::Vec3f>& point_set) {
     point_set.clear(); 
     for (int i = 0; i < z; i++) {
@@ -15,18 +20,26 @@ int create_point_set(int x, int z, std::vector<cv::Vec3f>& point_set) {
     }
     return 0;
 }
+
+// Function to write the camera calibration to a txt file, camera matrix in the first row, distortion coefficients in the second row
+// const char* filename: name of the file to write to
+// cv::Mat& cameraMatrix: camera matrix
+// cv::Mat& distCoeffs: distortion coefficients
+// Returns 0 if successful
 int writeCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat& distCoeffs) {
     std::ofstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Error opening file: " << filename << std::endl;
         return -1;
     }
+    // Camera Matrix
     for (int i = 0; i < cameraMatrix.rows; i++) {
         for (int j = 0; j < cameraMatrix.cols; j++) {
             file << cameraMatrix.at<double>(i, j) << " ";
         }
     }
     file << std::endl;
+    // Distortion Coefficients
     for (int i = 0; i < distCoeffs.rows; i++) {
         for (int j = 0; j < distCoeffs.cols; j++) {
             file << distCoeffs.at<double>(i, j) << " ";
@@ -36,6 +49,11 @@ int writeCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat&
     file.close();
     return 0;
 }
+// Function to write the camera calibration to a JSON file for easy reading
+// const char* filename: name of the file to write to
+// cv::Mat& cameraMatrix: camera matrix
+// cv::Mat& distCoeffs: distortion coefficients
+// Returns 0 if successful
 int writeCameraCalibrationJSON(const char* filename, cv::Mat& cameraMatrix, cv::Mat& distCoeffs)
 {
     std::ofstream file(filename);
@@ -82,7 +100,11 @@ int writeCameraCalibrationJSON(const char* filename, cv::Mat& cameraMatrix, cv::
     file.close();
     return 0;
 }
-
+// Function to write the rotation and translation vectors to a txt file
+// const char* filename: name of the file to write to
+// std::vector<cv::Mat>& rvecs: vector of rotation vectors
+// std::vector<cv::Mat>& tvecs: vector of translation vectors
+// Returns 0 if successful
 int writeRTvectors(const char* filename, std::vector<cv::Mat>& rvecs, std::vector<cv::Mat>& tvecs)
 {
     std::ofstream file(filename);
@@ -136,9 +158,14 @@ int writeRTvectors(const char* filename, std::vector<cv::Mat>& rvecs, std::vecto
     file.close();
     return 0;
 }
-
+// Function to read the camera calibration from a txt file
+// const char* filename: name of the file to read from
+// cv::Mat& cameraMatrix: camera matrix
+// cv::Mat& distCoeffs: distortion coefficients
+// Returns 0 if successful
 int readCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat& distCoeffs)
 {
+    // Structure of vectors
      const int C_ROWS = 3, C_COLS = 3;
      const int D_ROWS = 5, D_COLS = 1;
  
@@ -186,7 +213,10 @@ int readCameraCalibration(const char* filename, cv::Mat& cameraMatrix, cv::Mat& 
  
      return 0;
 }
-
+// Get (x, y, z) points from a CSV file
+// char* filename: name of the file to read from
+// std::vector<std::vector<float>> &data: reference to the vector of points
+// Returns 0 if successful
 int readInPoints(char *filename, std::vector<std::vector<float>> &data)
 {
     std::vector<char *> filenames;
@@ -197,7 +227,14 @@ int readInPoints(char *filename, std::vector<std::vector<float>> &data)
     }
     return 0;
 }
-
+// Reads in points from a CSV file and projects them onto the image
+// cv::Mat& frame: reference to the image to draw on
+// const cv::Vec3d& rotation_vec: rotation vector
+// const cv::Vec3d& translation_vec: translation vector
+// const cv::Mat& cameraMatrix: camera matrix
+// const cv::Mat& distCoeffs: distortion coefficients
+// std::vector<cv::Point2f>& image_points: reference to the vector of image points
+// Returns 0 if successful
 int draw_sphere(cv::Mat& frame, const cv::Vec3d& rotation_vec, const cv::Vec3d& translation_vec, const cv::Mat& cameraMatrix, const cv::Mat& distCoeffs, std::vector<cv::Point2f>& image_points)
 {
     std::vector<std::vector<float>> points;

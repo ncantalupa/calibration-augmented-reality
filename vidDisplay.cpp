@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
     cv::Mat foundCornersImg; // Image with corners drawn on it
     std::vector<cv::Point2f> corner_set; // Vector of corners found
     std::vector<cv::Point2f> foundCornersCoords; // Vector of corners found, for saving last found set
-    int x = 9;
-    int z = 6;
+    int x = 9; // Rows of the chessboard pattern
+    int z = 6;  // Columns of the chessboard pattern
     cv::Size patternsize(x, z); // Size of the chessboard pattern
     std::vector<cv::Vec3f> point_set; // Vector of 3D points
     std::vector<std::vector<cv::Vec3f>> point_list; // List of 3D points
@@ -204,7 +204,7 @@ int main(int argc, char* argv[])
             {
                 std::cout << "Calibrating camera" << std::endl;
 
-                // Initialize camera matrix with reasonable values
+                // Initialize camera matrix
                 cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
                 cameraMatrix.at<double>(0, 0) = 1.0; // fx (focal length in x-direction)
                 cameraMatrix.at<double>(1, 1) = 1.0; // fy (focal length in y-direction)
