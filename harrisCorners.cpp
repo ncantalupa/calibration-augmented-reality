@@ -4,7 +4,7 @@ Code for video feed from Bruce Maxwell
 CS5330 Computer Vision
 03/14/2025
 
-Display a video feed
+Display a video feed with Harris corners
 
 */
 
@@ -51,7 +51,8 @@ int main(int argc, char* argv[])
 
         cv::Mat gray;
         cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-        cv::Mat dst = cv::Mat::zeros( frame.size(), CV_32FC1 );
+        cv::Mat dst = cv::Mat::zeros( frame.size(), CV_32FC1 ); // Matrix to store the Harris detector responses
+        // Best params were blockSize = 3, ksize = 3, k = 0.04
         cv::cornerHarris( gray, dst, 3, 3, 0.04 );
 
         for( int i = 0; i < frame.rows ; i++ )
@@ -60,6 +61,7 @@ int main(int argc, char* argv[])
             {
                 if( dst.at<float>(i, j) > 0.0001 )
                 {
+                    // If the likelihood of a corner is above the threshold above, circle it
                     circle( frame, cv::Point(j,i), 5,  cv::Scalar(0, 0, 255), 2, 8, 0 );
                 }
             }

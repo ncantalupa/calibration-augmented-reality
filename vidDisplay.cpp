@@ -4,7 +4,12 @@ Code for video feed from Bruce Maxwell
 CS5330 Computer Vision
 03/14/2025
 
-Display a video feed
+Display a video feed with AR
+
+Before calibration, the program will display the corners found in the chessboard pattern
+To calibrate, collect >=5 samples by pressing "s" to save the image, then press "c" to calibrate
+After calibration, the program will display the 3D points on the image, the rotation and translation vectors, and the axes
+Press "1" to display a 3D projected sphere, and "2" to display an airplane floating above the chessboard
 
 */
 
@@ -146,6 +151,7 @@ int main(int argc, char* argv[])
                 cv::line(frame, image_points[0], image_points[2], cv::Scalar(0, 255, 0), 3);
                 cv::line(frame, image_points[0], image_points[3], cv::Scalar(255, 0, 0), 3);
 
+                // Draw the appropriate 3D object given the key pressed
                 if (object_3d == 1)
                 {
                     draw_sphere(frame, rotation_vec, translation_vec, cameraMatrix, distCoeffs, image_points);
