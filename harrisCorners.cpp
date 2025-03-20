@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
         {
             for( int j = 0; j < frame.cols; j++ )
             {
-                if( dst.at<float>(i, j) > 0.001 )
+                if( dst.at<float>(i, j) > 0.0001 )
                 {
                     circle( frame, cv::Point(j,i), 5,  cv::Scalar(0, 0, 255), 2, 8, 0 );
                 }

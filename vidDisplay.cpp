@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     std::vector<std::vector<cv::Point2f>> corner_list; // List of the corners found in each image
     cv::Mat cameraMatrix; // Camera matrix
     cv::Mat distCoeffs; // Distortion coefficients
-    int object_3d = 1; // 1 for sphere, 2 for airplane
+    int object_3d = 0; // 1 for sphere, 2 for airplane
 
     
     if (std::ifstream file("../camera_calibration.txt"); file.good())
@@ -162,6 +162,11 @@ int main(int argc, char* argv[])
         // see if there is a waiting keystroke
         constexpr int waitTime = 1000 / FRAME_RATE;
         const char key = static_cast<char>(cv::waitKey(waitTime));
+
+        if (key =='0')
+        {
+            object_3d = 0;
+        }
 
         if (key == '1')
         {
