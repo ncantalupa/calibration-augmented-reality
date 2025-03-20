@@ -3,6 +3,7 @@
 Nick Cantalupa and Sean Duffy
 
 https://www.youtube.com/watch?v=44_nmsOVgSE
+https://drive.google.com/file/d/1eOVSKuasedi-_3aCDoNpGlE2v6jYn-sX/view?usp=sharing
 
 We compiled the code using VS Code and CMake, as well as CLion. 
 
@@ -25,4 +26,4 @@ This program is set to calibrate on a 9x6 checkerboard pattern. Print out this p
 
 Our extension is the creation of the spherical points using the object_points.py file. The photos can be seen in the report or replicated as seen in the instructions above.
 
-We are submitting late with permission from Prof. Maxwell due to personal reasons, falling into the Stuff Happens Clause.
+We are submitting late with permission from Prof. Maxwell due to personal reasons.
